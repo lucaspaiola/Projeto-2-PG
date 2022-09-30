@@ -7,7 +7,7 @@ function main() {
 
     // creates buffers 
     const cubeBufferInfo = primitives.createCubeWithVertexColorsBufferInfo(gl, 15);
-    const coneBufferInfo   = primitives.createTruncatedConeWithVertexColorsBufferInfo(gl, 10, 0, 20, 12, 1, true, false);
+    const coneBufferInfo = primitives.createTruncatedConeWithVertexColorsBufferInfo(gl, 10, 0, 20, 12, 1, true, false);
     const sphereBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
 
     // setup GLSL program
@@ -36,9 +36,9 @@ function main() {
         u_matrix: m4.identity(),
     };
 
-    var cubeTranslation = [-170, 40, 0];
-    var coneTranslation   = [ 40, 0, 0];
-    var sphereTranslation = [  0, 0, 0];
+    var cubeTranslation = [-70, -20, 0];
+    var coneTranslation = [40, 0, -20];
+    var sphereTranslation = [0, 0, 0];
 
     var objectsToDraw = [
         {
@@ -74,8 +74,11 @@ function main() {
     // Draw the scene.
     function drawScene(time) {
         time *= 0.0005;
-        cubeTranslation[0] += 0.5
-        if (cubeTranslation[0] > 170) cubeTranslation[0] = -170
+        if (cubeTranslation[2] > 50) cubeTranslation[2] = 0
+        else cubeTranslation[2] += 0.5
+
+        sphereTranslation[1] += 0.5
+        if (sphereTranslation[1] > 80) sphereTranslation[1] = -80
 
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -107,11 +110,11 @@ function main() {
         var cubeXRotation = -time;
         var cubeYRotation = time;
 
-        var coneXRotation   =  time;
-        var coneYRotation   = -time;
+        var coneXRotation = time;
+        var coneYRotation = -time;
 
-        var sphereXRotation =  time;
-        var sphereYRotation =  time;
+        var sphereXRotation = time;
+        var sphereYRotation = time;
 
         // Compute the matrices for each object.
 
