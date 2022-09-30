@@ -6,7 +6,7 @@ function main() {
     }
 
     // creates buffers 
-    const cubeBufferInfo = primitives.createCubeWithVertexColorsBufferInfo(gl, 20);
+    const cubeBufferInfo = primitives.createCubeWithVertexColorsBufferInfo(gl, 15);
 
     // setup GLSL program
     var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
@@ -15,16 +15,16 @@ function main() {
         return d * Math.PI / 180;
     }
 
-    var fieldOfViewRadians = degToRad(60);
+    var fieldOfViewRadians = degToRad(50);
 
     // Uniforms for each object.
 
     var cubeUniforms = {
-        u_colorMult: [1, 0.5, 0.5, 1],
+        u_colorMult: [0.5, 1, 0.5, 1],
         u_matrix: m4.identity(),
     };
 
-    var cubeTranslation = [-40, 0, 0];
+    var cubeTranslation = [-170, 40, 0];
 
     var objectsToDraw = [
         {
@@ -48,6 +48,8 @@ function main() {
     // Draw the scene.
     function drawScene(time) {
         time *= 0.0005;
+        cubeTranslation[0] += 0.5
+        if (cubeTranslation[0] > 170) cubeTranslation[0] = -170
 
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -66,7 +68,7 @@ function main() {
             m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
         // Compute the camera's matrix using look at.
-        var cameraPosition = [0, 0, 100];
+        var cameraPosition = [0, 0, 150];
         var target = [0, 0, 0];
         var up = [0, 1, 0];
         var cameraMatrix = m4.lookAt(cameraPosition, target, up);
