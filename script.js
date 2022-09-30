@@ -9,6 +9,7 @@ function main() {
     const cubeBufferInfo = primitives.createCubeWithVertexColorsBufferInfo(gl, 15);
     const coneBufferInfo = primitives.createTruncatedConeWithVertexColorsBufferInfo(gl, 10, 0, 20, 12, 1, true, false);
     const sphereBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
+    const FBufferInfo = primitives.create3DFWithVertexColorsBufferInfo(gl);
 
     // setup GLSL program
     var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
@@ -36,9 +37,15 @@ function main() {
         u_matrix: m4.identity(),
     };
 
-    var cubeTranslation = [-70, -20, 0];
-    var coneTranslation = [40, 0, -20];
-    var sphereTranslation = [0, 0, 0];
+    var fUniforms = {
+        u_colorMult: [1, 1, 1, 1],
+        u_matrix: m4.identity(),
+    };
+
+    var cubeTranslation = [-130, 0, 0];
+    var coneTranslation = [100, 0, -20];
+    var sphereTranslation = [30, 0, 30];
+    var fTranslation = [-200, 0, -1000];
 
     var objectsToDraw = [
         {
@@ -58,6 +65,11 @@ function main() {
             bufferInfo: sphereBufferInfo,
             uniforms: sphereUniforms,
         },
+        {
+            programInfo: programInfo,
+            bufferInfo: FBufferInfo,
+            uniforms: fUniforms,
+        },
     ];
 
     function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
@@ -74,8 +86,14 @@ function main() {
     // Draw the scene.
     function drawScene(time) {
         time *= 0.0005;
-        if (cubeTranslation[2] > 50) cubeTranslation[2] = 0
-        else cubeTranslation[2] += 0.5
+        if (cubeTranslation[0] > 30) {
+            cubeTranslation[2] = 0
+            cubeTranslation[0] = -130
+        }
+        else {
+            cubeTranslation[2] += 0.5
+            cubeTranslation[0] += 0.5
+        }
 
         sphereTranslation[1] += 0.5
         if (sphereTranslation[1] > 80) sphereTranslation[1] = -80
@@ -116,6 +134,9 @@ function main() {
         var sphereXRotation = time;
         var sphereYRotation = time;
 
+        var fXRotation = time;
+        var fYRotation = -time;
+
         // Compute the matrices for each object.
 
         cubeUniforms.u_matrix = computeMatrix(
@@ -135,6 +156,12 @@ function main() {
             sphereTranslation,
             sphereXRotation,
             sphereYRotation);
+
+        fUniforms.u_matrix = computeMatrix(
+            viewProjectionMatrix,
+            fTranslation,
+            fXRotation,
+            fYRotation);
 
         // ------ Draw the objects --------
 
