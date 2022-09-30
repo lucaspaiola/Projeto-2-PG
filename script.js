@@ -7,6 +7,7 @@ function main() {
 
     // creates buffers 
     const cubeBufferInfo = primitives.createCubeWithVertexColorsBufferInfo(gl, 20);
+    const coneBufferInfo   = primitives.createTruncatedConeWithVertexColorsBufferInfo(gl, 10, 0, 20, 12, 1, true, false);
 
     // setup GLSL program
     var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
@@ -24,13 +25,25 @@ function main() {
         u_matrix: m4.identity(),
     };
 
+    var coneUniforms = {
+        u_colorMult: [0.5, 0.8, 0.8, 1],
+        u_matrix: m4.identity(),
+      };
+
     var cubeTranslation = [-40, 0, 0];
+    var coneTranslation   = [ 40, 0, 0];
 
     var objectsToDraw = [
         {
             programInfo: programInfo,
             bufferInfo: cubeBufferInfo,
             uniforms: cubeUniforms,
+        },
+
+        {
+            programInfo: programInfo,
+            bufferInfo: coneBufferInfo,
+            uniforms: coneUniforms,
         },
     ];
 
@@ -79,6 +92,9 @@ function main() {
         var cubeXRotation = -time;
         var cubeYRotation = time;
 
+        var coneXRotation   =  time;
+        var coneYRotation   = -time;
+
         // Compute the matrices for each object.
 
         cubeUniforms.u_matrix = computeMatrix(
@@ -86,6 +102,12 @@ function main() {
             cubeTranslation,
             cubeXRotation,
             cubeYRotation);
+
+        coneUniforms.u_matrix = computeMatrix(
+            viewProjectionMatrix,
+            coneTranslation,
+            coneXRotation,
+            coneYRotation);
 
 
         // ------ Draw the objects --------
