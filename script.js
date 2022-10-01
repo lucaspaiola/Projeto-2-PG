@@ -1,3 +1,5 @@
+var mover = false;
+var rotacionar = false;
 function main() {
     var canvas = document.querySelector("#glcanvas");
     var gl = canvas.getContext("webgl");
@@ -85,18 +87,26 @@ function main() {
 
     // Draw the scene.
     function drawScene(time) {
-        time *= 0.0005;
-        if (cubeTranslation[0] > 30) {
-            cubeTranslation[2] = 0
-            cubeTranslation[0] = -130
-        }
-        else {
-            cubeTranslation[2] += 0.5
-            cubeTranslation[0] += 0.5
-        }
+        if(mover){
+            if (cubeTranslation[0] > 30) {
+                cubeTranslation[2] = 0
+                cubeTranslation[0] = -130
+            }
+            else {
+                cubeTranslation[2] += 0.5
+                cubeTranslation[0] += 0.5
+            }
 
-        sphereTranslation[1] += 0.5
-        if (sphereTranslation[1] > 80) sphereTranslation[1] = -80
+            sphereTranslation[1] += 0.5
+            if (sphereTranslation[1] > 80) sphereTranslation[1] = -80
+        }
+        if(rotacionar){
+            time *= 0.0005;
+        }
+        else{
+            time = 0;
+        }
+        
 
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -182,6 +192,25 @@ function main() {
         });
 
         requestAnimationFrame(drawScene);
+    }
+
+    document.getElementById("mover").onclick = function(){
+        mover = !mover
+        if(mover){
+            this.value = "Parar de Mover";
+        }
+        else{
+            this.value = "Mover";
+        }
+    }
+    document.getElementById("rotacionar").onclick = function(){
+        rotacionar = !rotacionar
+        if(rotacionar){
+            this.value = "Parar de Rotacionar";
+        }
+        else{
+            this.value = "Rotacionar";
+        }
     }
 }
 

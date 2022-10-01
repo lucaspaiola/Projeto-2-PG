@@ -4,6 +4,13 @@ body {
 }
 canvas {
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   display: block;
+  background-color: black;
+}
+
+input {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
 }
